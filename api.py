@@ -8,6 +8,7 @@ import json
 import os
 from werkzeug.utils import secure_filename
 
+from flask_cors import CORS
 
 
 
@@ -23,7 +24,9 @@ from inference import get_prediction
 
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
+# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 UPLOAD_FOLDER = 'images/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -45,10 +48,12 @@ def hello_worlds():
     return 'Hello, World!'
 
 @app.route('/imageclassifier/predict/', methods=['GET','POST'])
+# @cross_origin()
 def image_classifier():
     print("files", request.files)
-    if 'file' not in request.files:
-            return jsonify( message='file not found' )
+    
+    # if 'file' not in request.files:
+            # return jsonify( message='file not found' )
     file = request.files['file']
     filename = secure_filename(file.filename)
     print(filename)
